@@ -1,0 +1,13 @@
+# Ignore node_modules folder
+node_modules/
+
+# Ignore environment variable files (usually for API keys and secrets)
+.env
+
+# Ignore log files
+*.log
+
+# Ignore system-specific files
+.DS_Store   # macOS system files
+Thumbs.db   # Windows system files
+
