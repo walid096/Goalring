@@ -1,0 +1,244 @@
+.goal-list-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.welcome-section {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    border-radius: 10px;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.goal-list-title {
+    margin: 0 0 1rem 0;
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+.welcome-message {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.goal-form {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.goal-input-group {
+    display: flex;
+    gap: 1rem;
+}
+
+.goal-input {
+    flex: 1;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.goal-input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.add-goal-button {
+    padding: 0 1.5rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.add-goal-button:hover {
+    background-color: #2980b9;
+    transform: translateY(-1px);
+}
+
+.goals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.goal-item {
+    background: white;
+    padding: 1.2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    border-left: 4px solid #3498db;
+}
+
+.goal-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.goal-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    flex: 1;
+}
+
+.goal-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin-top: 0.2rem;
+}
+
+.goal-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.goal-text {
+    font-size: 1.1rem;
+    color: #2c3e50;
+    line-height: 1.4;
+}
+
+.goal-date {
+    font-size: 0.85rem;
+    color: #95a5a6;
+}
+
+.goal-item.completed {
+    border-left-color: #2ecc71;
+    opacity: 0.8;
+}
+
+.goal-item.completed .goal-text {
+    text-decoration: line-through;
+    color: #95a5a6;
+}
+
+.delete-goal-button {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+}
+
+.delete-goal-button:hover {
+    background-color: #fde8e8;
+    opacity: 1;
+}
+
+.goal-error {
+    background-color: #fde8e8;
+    color: #e74c3c;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    text-align: center;
+    animation: slideIn 0.3s ease;
+}
+
+.goal-success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    text-align: center;
+    animation: slideIn 0.3s ease;
+}
+
+.no-goals {
+    text-align: center;
+    color: #95a5a6;
+    padding: 3rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.no-goals p {
+    margin: 0;
+}
+
+.no-goals-subtitle {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.goal-list-loading {
+    text-align: center;
+    color: #3498db;
+    padding: 2rem;
+    font-size: 1.2rem;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 600px) {
+    .welcome-section {
+        padding: 1.5rem;
+    }
+
+    .goal-list-title {
+        font-size: 1.8rem;
+    }
+
+    .welcome-message {
+        font-size: 1rem;
+    }
+
+    .goal-input-group {
+        flex-direction: column;
+    }
+
+    .add-goal-button {
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .goal-item {
+        padding: 1rem;
+    }
+
+    .goal-text {
+        font-size: 1rem;
+    }
+}

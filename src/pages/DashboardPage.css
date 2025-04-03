@@ -1,0 +1,449 @@
+.dashboard-container {
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+.dashboard-header {
+    background-color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.dashboard-header h1 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.8rem;
+}
+
+.sign-out-button {
+    padding: 0.5rem 1rem;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.sign-out-button:hover {
+    background-color: #c0392b;
+}
+
+.dashboard-main {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.welcome-section {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    border-radius: 10px;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.goal-list-title {
+    margin: 0 0 1rem 0;
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+.welcome-message {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.goal-form {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.goal-input-group {
+    display: flex;
+    gap: 1rem;
+}
+
+.goal-input {
+    flex: 1;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.goal-input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.goal-input:disabled {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}
+
+.add-goal-button {
+    padding: 0 1.5rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.add-goal-button:hover:not(:disabled) {
+    background-color: #2980b9;
+    transform: translateY(-1px);
+}
+
+.add-goal-button:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.goals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.goal-item {
+    background: white;
+    padding: 1.2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    border-left: 4px solid #3498db;
+}
+
+.goal-item:hover:not(.processing) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.goal-item.processing {
+    opacity: 0.7;
+    cursor: wait;
+}
+
+.goal-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    flex: 1;
+}
+
+.goal-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin-top: 0.2rem;
+}
+
+.goal-checkbox:disabled {
+    cursor: wait;
+}
+
+.goal-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.goal-text {
+    font-size: 1.1rem;
+    color: #2c3e50;
+    line-height: 1.4;
+}
+
+.goal-date {
+    font-size: 0.85rem;
+    color: #95a5a6;
+}
+
+.goal-item.completed {
+    border-left-color: #2ecc71;
+    opacity: 0.8;
+}
+
+.goal-item.completed .goal-text {
+    text-decoration: line-through;
+    color: #95a5a6;
+}
+
+.delete-goal-button {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+    min-width: 40px;
+}
+
+.delete-goal-button:hover:not(:disabled) {
+    background-color: #fde8e8;
+    opacity: 1;
+}
+
+.delete-goal-button:disabled {
+    cursor: wait;
+}
+
+.goal-error {
+    background-color: #fde8e8;
+    color: #e74c3c;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    text-align: center;
+    animation: slideIn 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.dismiss-error {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+}
+
+.dismiss-error:hover {
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+.goal-success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    text-align: center;
+    animation: slideIn 0.3s ease;
+}
+
+.no-goals {
+    text-align: center;
+    color: #95a5a6;
+    padding: 3rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.no-goals p {
+    margin: 0;
+}
+
+.no-goals-subtitle {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.dashboard-loading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-size: 1.2rem;
+    color: #3498db;
+    gap: 1rem;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-header {
+        padding: 1rem;
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .welcome-section {
+        padding: 1.5rem;
+    }
+
+    .goal-list-title {
+        font-size: 1.8rem;
+    }
+
+    .welcome-message {
+        font-size: 1rem;
+    }
+
+    .goal-input-group {
+        flex-direction: column;
+    }
+
+    .add-goal-button {
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .goal-item {
+        padding: 1rem;
+    }
+
+    .goal-text {
+        font-size: 1rem;
+    }
+}
+
+.notification-settings {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.notification-settings label {
+    font-size: 1rem;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.interval-select {
+    padding: 0.5rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: #2c3e50;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.interval-select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.enable-notifications-button {
+    padding: 0.5rem 1rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: auto;
+}
+
+.enable-notifications-button:hover {
+    background-color: #2980b9;
+    transform: translateY(-1px);
+}
+
+.test-notification-button {
+    padding: 0.5rem 1rem;
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 1rem;
+}
+
+.test-notification-button:hover {
+    background-color: #27ae60;
+    transform: translateY(-1px);
+}
+
+.interval-input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.interval-input {
+    width: 80px;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.interval-input:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.interval-unit {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
