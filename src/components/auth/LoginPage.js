@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { signIn, signInWithGoogle, signInWithAnonymous } from "../firebase";
-import { Link } from "react-router-dom";
+import { signIn, signInWithGoogle, signInWithAnonymous } from "../../firebase";
+import { Link, useNavigate } from "react-router-dom";
 import "./AuthPages.css";
 
 const LoginPage = () => {
@@ -10,6 +10,7 @@ const LoginPage = () => {
     const [loading, setLoading] = useState(false);
     const [retryCount, setRetryCount] = useState(0);
     const MAX_RETRIES = 3;
+    const navigate = useNavigate();
 
     // Check for stored email from signup page
     useEffect(() => {
@@ -46,18 +47,16 @@ const LoginPage = () => {
         setLoading(true);
 
         try {
-            // Check network status before attempting login
             if (!navigator.onLine) {
                 throw new Error("No internet connection. Please check your network and try again.");
             }
 
             await signIn(email, password);
-            // The redirection to dashboard is handled in the signIn function
+            navigate('/dashboard'); // Navigate to dashboard after successful login
         } catch (error) {
             setLoading(false);
             setError(error.message);
 
-            // If it's a network error and we haven't exceeded max retries, allow retry
             if (error.message.includes("network") && retryCount < MAX_RETRIES) {
                 setRetryCount(prev => prev + 1);
             }
@@ -73,7 +72,7 @@ const LoginPage = () => {
                 throw new Error("No internet connection. Please check your network and try again.");
             }
             await signInWithGoogle();
-            // The redirection to dashboard is handled in the signInWithGoogle function
+            navigate('/dashboard'); // Navigate to dashboard after successful Google login
         } catch (error) {
             setLoading(false);
             setError(error.message || "An error occurred during Google login.");
@@ -89,7 +88,7 @@ const LoginPage = () => {
                 throw new Error("No internet connection. Please check your network and try again.");
             }
             await signInWithAnonymous();
-            // The redirection to dashboard is handled in the signInWithAnonymous function
+            navigate('/dashboard'); // Navigate to dashboard after successful anonymous login
         } catch (error) {
             setLoading(false);
             setError(error.message || "An error occurred during anonymous login.");

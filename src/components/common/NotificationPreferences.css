@@ -1,0 +1,64 @@
+.notification-preferences {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.notification-preferences h3 {
+    margin: 0 0 1.5rem 0;
+    color: #2c3e50;
+    font-size: 1.2rem;
+}
+
+.preference-section {
+    margin-top: 1.5rem;
+}
+
+.preference-section label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.interval-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.interval-button {
+    padding: 0.5rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: white;
+    color: #2c3e50;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 80px;
+    text-align: center;
+}
+
+.interval-button:hover {
+    border-color: #3498db;
+    transform: translateY(-1px);
+}
+
+.interval-button.active {
+    background-color: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+
+@media (max-width: 600px) {
+    .interval-options {
+        flex-direction: column;
+    }
+
+    .interval-button {
+        width: 100%;
+    }
+}

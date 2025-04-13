@@ -3,11 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { auth, signOutUser, createGoal, getGoals, updateGoal, deleteGoal } from '../firebase';
 import {
     requestNotificationPermission,
-    scheduleNotification,
-    updateNotificationInterval
+    startNotifications,
+    stopNotifications,
+    updateNotificationInterval,
+    testNotificationService,
+    scheduleNotification
 } from '../services/notificationService';
 import { cancelNotification } from '../services/notificationUtils';
+import NotificationPreferences from '../components/common/NotificationPreferences';
 import './DashboardPage.css';
+import { toast } from 'react-hot-toast';
 
 const DashboardPage = () => {
     const [loading, setLoading] = useState(true);
@@ -20,6 +25,8 @@ const DashboardPage = () => {
     const [currentUserId, setCurrentUserId] = useState(null);
     const [notificationInterval, setNotificationInterval] = useState(5);
     const [notificationPermission, setNotificationPermission] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [notificationStyle, setNotificationStyle] = useState('deep');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -41,10 +48,33 @@ const DashboardPage = () => {
 
     const checkNotificationPermission = async () => {
         try {
+            // If notifications are already enabled, disable them
+            if (notificationPermission) {
+                // Cancel all active notifications
+                const activeGoals = goals.filter(goal => !goal.completed);
+                const cancellationResults = await Promise.all(
+                    activeGoals.map(goal => cancelNotification(goal.id))
+                );
+
+                // Check if any cancellations failed
+                const allCancelled = cancellationResults.every(result => result);
+                if (!allCancelled) {
+                    console.warn('Some notifications could not be cancelled');
+                }
+
+                setNotificationPermission(false);
+                toast.success('Notifications disabled');
+                return;
+            }
+
+            // Otherwise, request permission to enable notifications
             const permission = await Notification.requestPermission();
             setNotificationPermission(permission === 'granted');
             if (permission === 'granted') {
                 await requestNotificationPermission();
+                toast.success('Notifications enabled');
+            } else {
+                toast.error('Please enable notifications in your browser settings');
             }
         } catch (error) {
             console.error('Error checking notification permission:', error);
@@ -109,10 +139,14 @@ const DashboardPage = () => {
 
             // Schedule notification if enabled
             if (notificationPermission) {
-                await scheduleNotification({ id: goalId, ...goalData }, notificationInterval);
+                await scheduleNotification(
+                    { id: goalId, ...goalData },
+                    notificationInterval,
+                    notificationStyle
+                );
             }
         } catch (error) {
-            console.error('Error creating goal for user:', auth.currentUser.uid, error);
+            console.error('Error creating goal:', error);
             setError('Failed to create goal');
         } finally {
             setIsSubmitting(false);
@@ -169,20 +203,79 @@ const DashboardPage = () => {
         }
     };
 
-    const handleIntervalChange = async (newInterval) => {
+    const handleStyleChange = async (style) => {
         try {
-            setNotificationInterval(newInterval);
-            // Update interval for all active goals
-            for (const goal of goals) {
-                if (goal.notificationEnabled) {
-                    await updateNotificationInterval(goal.id, newInterval);
+            setIsLoading(true);
+            // Update style for all active goals
+            const activeGoals = goals.filter(goal => !goal.completed);
+            await Promise.all(
+                activeGoals.map(goal =>
+                    updateNotificationInterval(goal.id, notificationInterval, style)
+                )
+            );
+            setNotificationStyle(style);
+        } catch (error) {
+            console.error('Error updating notification style:', error);
+            toast.error('Failed to update notification style');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleNotificationToggle = async () => {
+        try {
+            setIsLoading(true);
+            if (notificationPermission) {
+                await stopNotifications();
+                setNotificationPermission(false);
+                toast.success('Notifications disabled');
+            } else {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    await startNotifications(notificationInterval);
+                    setNotificationPermission(true);
+                    toast.success('Notifications enabled');
+                } else {
+                    toast.error('Please enable notifications in your browser settings');
                 }
             }
-            setSuccessMessage('Reminder interval updated successfully');
-            setTimeout(() => setSuccessMessage(null), 3000);
         } catch (error) {
-            console.error('Error updating notification interval:', error);
-            setError('Failed to update reminder interval');
+            console.error('Error toggling notifications:', error);
+            toast.error('Failed to toggle notifications');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleIntervalChange = async (newInterval) => {
+        try {
+            setIsLoading(true);
+            const success = await updateNotificationInterval(newInterval);
+            if (success) {
+                setNotificationInterval(newInterval);
+                toast.success(`Notification interval updated to ${newInterval} minutes`);
+            } else {
+                toast.error('Failed to update notification interval');
+            }
+        } catch (error) {
+            console.error('Error updating interval:', error);
+            toast.error('Failed to update notification interval');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleTestNotifications = async () => {
+        try {
+            const result = await testNotificationService();
+            if (result) {
+                toast.success('Notification test successful!');
+            } else {
+                toast.error('Notification test failed');
+            }
+        } catch (error) {
+            console.error('Test error:', error);
+            toast.error('Error testing notifications');
         }
     };
 
@@ -213,32 +306,14 @@ const DashboardPage = () => {
                     </p>
                 </div>
 
-                <div className="notification-settings">
-                    <label htmlFor="notificationInterval">Reminder Interval (minutes):</label>
-                    <div className="interval-input-group">
-                        <input
-                            type="number"
-                            id="notificationInterval"
-                            value={notificationInterval}
-                            onChange={(e) => {
-                                const value = Math.min(Math.max(1, parseInt(e.target.value) || 1), 60);
-                                handleIntervalChange(value);
-                            }}
-                            min="1"
-                            max="60"
-                            className="interval-input"
-                        />
-                        <span className="interval-unit">minutes</span>
-                    </div>
-                    {!notificationPermission && (
-                        <button
-                            onClick={checkNotificationPermission}
-                            className="enable-notifications-button"
-                        >
-                            Enable Notifications
-                        </button>
-                    )}
-                </div>
+                <NotificationPreferences
+                    notificationEnabled={notificationPermission}
+                    onEnableNotifications={handleNotificationToggle}
+                    interval={notificationInterval}
+                    onIntervalChange={handleIntervalChange}
+                    notificationStyle={notificationStyle}
+                    onStyleChange={handleStyleChange}
+                />
 
                 <form onSubmit={handleSubmit} className="goal-form">
                     <div className="goal-input-group">
@@ -319,6 +394,22 @@ const DashboardPage = () => {
                         ))
                     )}
                 </div>
+
+                <button
+                    onClick={handleTestNotifications}
+                    className="test-notification-button"
+                    style={{
+                        padding: '8px 16px',
+                        backgroundColor: '#4CAF50',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        margin: '10px'
+                    }}
+                >
+                    Test Notifications
+                </button>
             </main>
         </div>
     );

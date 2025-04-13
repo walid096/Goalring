@@ -6,6 +6,8 @@ import {
     setPersistence, browserLocalPersistence, updateProfile
 } from "firebase/auth";
 import { getFirestore, collection, doc, setDoc, getDoc, getDocs, updateDoc, deleteDoc, query, orderBy, where, addDoc } from "firebase/firestore";
+import { getFunctions } from "firebase/functions";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 // Your Firebase configuration
 const firebaseConfig = {
@@ -22,6 +24,57 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const functions = getFunctions(app);
+
+// Initialize Firebase Messaging
+let messagingInstance = null;
+try {
+    if ('serviceWorker' in navigator) {
+        messagingInstance = getMessaging(app);
+        // Request permission and get token
+        Notification.requestPermission().then((permission) => {
+            if (permission === 'granted') {
+                console.log('Notification permission granted.');
+                // Get the token
+                getToken(messagingInstance, {
+                    vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY
+                }).then((currentToken) => {
+                    if (currentToken) {
+                        console.log('FCM Token:', currentToken);
+                    } else {
+                        console.log('No registration token available.');
+                    }
+                }).catch((err) => {
+                    console.log('An error occurred while retrieving token:', err);
+                });
+            } else {
+                console.log('Unable to get permission to notify.');
+            }
+        });
+    }
+} catch (err) {
+    console.log('Failed to initialize Firebase Messaging:', err);
+}
+
+const messaging = messagingInstance;
+
+// Handle foreground messages
+if (messaging) {
+    onMessage(messaging, (payload) => {
+        console.log('Received foreground message:', payload);
+        // Show notification using the Notifications API
+        if (Notification.permission === 'granted') {
+            const { title, body } = payload.notification;
+            new Notification(title, {
+                body,
+                icon: '/logo192.png',
+                badge: '/logo192.png',
+                requireInteraction: true
+            });
+        }
+    });
+}
+
 const provider = new GoogleAuthProvider();
 
 // Set persistence for authentication
@@ -194,15 +247,17 @@ const deleteGoal = async (goalId) => {
     }
 };
 
-// Export services for use in other files
+// Export all Firebase services
 export {
     auth,
     db,
-    signInWithGoogle,
-    signUp,
+    functions,
+    messaging,
     signIn,
     signInWithAnonymous,
+    signInWithGoogle,
     signOutUser,
+    signUp,
     createGoal,
     getGoals,
     updateGoal,
