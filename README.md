@@ -1,5 +1,3 @@
-<img width="1886" height="876" alt="image" src="https://github.com/user-attachments/assets/00de8fe6-d5fc-4809-978c-eb40ffaf3430" /># 🎯 GOALRING - The Anti-Distraction Goal Reminder
-
 
 ---
 
@@ -82,6 +80,8 @@ GOALRING combines **AI-powered personalization** with **smart timing** to delive
 <img width="1885" height="879" alt="image" src="https://github.com/user-attachments/assets/0449c888-fd50-43bd-92c7-b022d869f66d" />
 <img width="1907" height="877" alt="image" src="https://github.com/user-attachments/assets/45c5d76d-6162-45de-8902-c56685401e09" />
 <img width="1886" height="876" alt="image" src="https://github.com/user-attachments/assets/f91aa782-6203-44df-8235-5e65a1e76d2a" />
+<img width="1900" height="859" alt="image" src="https://github.com/user-attachments/assets/00b7adb1-bef7-42bc-8d1b-582684753698" />
+
 
 
 </div>
